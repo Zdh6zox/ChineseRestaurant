@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum GenderType : uint
 {
-    GenderType_Male,   //男性
+    GenderType_Male,   //男性 被vs改过
     GenderType_Female  //女性
 }
 
