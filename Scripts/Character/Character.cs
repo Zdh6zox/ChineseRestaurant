@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GenderType : uint
+public enum GenderType : int
 {
+    GenderType_Unset,  //未设定，用于中性姓名
     GenderType_Male,   //男性
     GenderType_Female  //女性
 }

@@ -48,6 +48,7 @@ public class Customer : Character
         
     }
 
+    #region TestCode
     void TestToJson()
     {
         CharacterName = "张三";
@@ -87,4 +88,5 @@ public class Customer : Character
         string testStr = JsonUtility.ToJson(this);
         Debug.Log(testStr);
     }
+    #endregion
 }
