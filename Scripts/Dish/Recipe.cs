@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,11 +18,16 @@ public enum RecipeType : uint
 }
 
 //菜谱类
+[Serializable]
 public class Recipe
 {
+    [SerializeField]
     private RecipeType m_Type;
+    [SerializeField]
     private string m_Name;
+    [SerializeField]
     private List<FlavourFactor> m_Flavours;
+    [SerializeField]
     private List<FlavourFactor> m_FlavourMods;
 
     public RecipeType Type { get => m_Type; set => m_Type = value; }
