@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5635486532302269335}
   - component: {fileID: 4725482924603438007}
   - component: {fileID: 959574394574952125}
-  - component: {fileID: 610715774375828076}
   m_Layer: 0
   m_Name: Customer
   m_TagString: Untagged
@@ -59,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ef4eec2db95738f40af27e97e7283a05, type: 2}
+  - {fileID: 2100000, guid: 5f3ded6117664ca46a32c9b3cc17f28d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,23 +92,3 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &610715774375828076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4396135920577105400}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36db6db76e5467f4686ba45c1758b43f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_CharacterName: 
-  m_Description: 
-  m_Gender: 0
-  m_Inventroy: {fileID: 0}
-  m_Relations: []
-  m_Type: 0
-  m_PreferRecipe: []
-  m_RestaurantRate: 0
