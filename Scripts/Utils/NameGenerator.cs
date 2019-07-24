@@ -22,6 +22,7 @@ public class NameGenerator
 {
     private List<FirstName> m_FirstNamesCache;
     private List<SecondName> m_SecondNameCache;
+    private List<string> m_GeneratedNameList = new List<string>();
 
     public NameGenerator(string firstNameJson,string secondNameJson)
     {
@@ -29,5 +30,11 @@ public class NameGenerator
         m_SecondNameCache = JsonUtility.FromJson<List<SecondName>>(secondNameJson);
     }
 
-
+    public bool GenerateNames(int number,ref List<string> nameList)
+    {
+        
+        if (m_GeneratedNameList.Count == number)
+            return true;
+        return false;
+    }
 }

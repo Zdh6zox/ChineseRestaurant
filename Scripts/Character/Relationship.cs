@@ -14,4 +14,10 @@ public class Relationship
 
     public string WithWho { get => m_WithWho; set => m_WithWho = value; }
     public int RelationScore { get => m_RelationScore; set => m_RelationScore = value; }
+
+    public Relationship(string name,int relationScore)
+    {
+        m_WithWho = name;
+        m_RelationScore = relationScore;
+    }
 }

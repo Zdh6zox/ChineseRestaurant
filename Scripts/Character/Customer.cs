@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,10 +19,8 @@ public enum CustomerType : uint
     CustomerType_Count
 }
 
-
-//对于Customer类，初步想法是先定义特殊的Customer，然后在初次运行时生成Customer表，储存在本地
-//在之后的游戏过程中都是读取该表来生成Customer
-public class Customer : Character
+[Serializable]
+public class CustomerData : CharacterData
 {
     [SerializeField]
     private CustomerType m_Type;
@@ -36,16 +35,10 @@ public class Customer : Character
     public List<Recipe> PreferRecipe { get => m_PreferRecipe; set => m_PreferRecipe = value; }
     public float RestaurantRate { get => m_RestaurantRate; set => m_RestaurantRate = value; }
 
-    // Start is called before the first frame update
-    void Start()
+    public static CustomerData GenerateRandomData()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        UnityEngine.Random.Range(0, 5);
+        return new CustomerData();
     }
 
     #region TestCode
@@ -54,9 +47,7 @@ public class Customer : Character
         CharacterName = "张三";
         Description = "张三就是张三";
         Gender = GenderType.GenderType_Male;
-        Relationship tmpRelationship = new Relationship();
-        tmpRelationship.WithWho = "李四";
-        tmpRelationship.RelationScore = 10;
+        Relationship tmpRelationship = new Relationship("李四",10);
         Relations.Add(tmpRelationship);
         m_Type = CustomerType.CustomerType_Beggar;
         FlavourFactor factor1 = new FlavourFactor();
@@ -89,4 +80,11 @@ public class Customer : Character
         Debug.Log(testStr);
     }
     #endregion
+}
+
+//对于Customer类，初步想法是先定义特殊的Customer，然后在初次运行时生成Customer表，储存在本地
+//在之后的游戏过程中都是读取该表来生成Customer
+public class Customer : MonoBehaviour
+{
+    public CustomerData CustomerData = new CustomerData();
 }

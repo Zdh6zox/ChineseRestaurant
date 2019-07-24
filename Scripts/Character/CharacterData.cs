@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +10,8 @@ public enum GenderType : int
     GenderType_Female  //女性
 }
 
-public class Character : MonoBehaviour
+[Serializable]
+public class CharacterData
 {
     [SerializeField]
     private string m_CharacterName;
@@ -18,25 +20,13 @@ public class Character : MonoBehaviour
     [SerializeField]
     private GenderType m_Gender;
     [SerializeField]
-    private Inventory m_Inventroy;
+    private Inventory m_Inventory;
     [SerializeField]
     private List<Relationship> m_Relations = new List<Relationship>(); //目前使用Name当Key,使用int来表示关系，范围为 [-10,10]
 
     public string CharacterName { get => m_CharacterName; set => m_CharacterName = value; }
     public string Description { get => m_Description; set => m_Description = value; }
     public GenderType Gender { get => m_Gender; set => m_Gender = value; }
-    public Inventory Inventroy { get => m_Inventroy; set => m_Inventroy = value; }
+    public Inventory Inventory { get => m_Inventory; set => m_Inventory = value; }
     public List<Relationship> Relations { get => m_Relations; set => m_Relations = value; }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
