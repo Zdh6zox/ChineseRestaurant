@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class SaveLoadManager : MonoBehaviour
+public class SaveLoadManager
 {
     private static string m_SaveFilePath;
     private static string m_CustomerTablePath;
@@ -12,27 +12,13 @@ public class SaveLoadManager : MonoBehaviour
 
 	private static SaveLoadManager m_Instance;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-      m_SaveFilePath = Application.dataPath + "/" + Application.productName + "/Save" + "/save.json";
-      m_CustomerTablePath = Application.dataPath + "/" + Application.productName + "/Save" + "/Customers.json";
-      m_FirstNameTablePath = Application.dataPath + "/" + Application.productName + "/Temp" + "/FirstName.json";
-      m_SecondNameTablePath = Application.dataPath + "/" + Application.productName + "/Temp" + "/SecondName.json";
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
 	private SaveLoadManager(string dataPath,string productName)
 	{
-		m_SaveFilePath = dataPath + "/" + productName + "/Save" + "/save.json";
-		m_CustomerTablePath = dataPath + "/" + productName + "/Save" + "/Customers.json";
-		m_FirstNameTablePath = dataPath + "/" + productName + "/Temp" + "/FirstName.json";
-		m_SecondNameTablePath = dataPath + "/" + productName + "/Temp" + "/SecondName.json";
+		m_SaveFilePath = dataPath + /*"/" + productName +*/ "/Save" + "/save.json";
+		m_CustomerTablePath = dataPath + /*"/" + productName +*/ "/Save" + "/Customers.json";
+		m_FirstNameTablePath = dataPath + /*"/" + productName +*/ "/Temp" + "/FirstName.json";
+		m_SecondNameTablePath = dataPath + /*"/" + productName +*/ "/Temp" + "/SecondName.json";
 	}
 
     public void SaveGame()
@@ -63,7 +49,6 @@ public class SaveLoadManager : MonoBehaviour
 		}
 
 		throw new System.Exception("Cannot Find First Name Table");
-		return "";
 	}
 
 	public string LoadSecondNameJson()
@@ -74,6 +59,12 @@ public class SaveLoadManager : MonoBehaviour
 		}
 
 		throw new System.Exception("Cannot Find Second Name Table");
-		return "";
+	}
+
+	public void SaveFirstNameJson(List<FirstName> firstNameTable)
+	{
+		string firstNameTableStr = SerializeTools.ListToJson<FirstName>(firstNameTable);
+		Debug.Log(firstNameTableStr);
+		File.WriteAllText(m_FirstNameTablePath, firstNameTableStr);
 	}
 }

@@ -42,7 +42,7 @@ public class CustomerData : CharacterData
     }
 
     #region TestCode
-    void TestToJson()
+    public void TestToJson()
     {
         CharacterName = "张三";
         Description = "张三就是张三";
@@ -86,5 +86,10 @@ public class CustomerData : CharacterData
 //在之后的游戏过程中都是读取该表来生成Customer
 public class Customer : MonoBehaviour
 {
-    public CustomerData CustomerData = new CustomerData();
+    public CustomerData Data = new CustomerData();
+
+	void Start()
+	{
+		//Data.TestToJson();
+	}
 }

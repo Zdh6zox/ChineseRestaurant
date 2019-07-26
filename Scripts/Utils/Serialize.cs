@@ -3,6 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
+public class Serialization<T>
+{
+	[SerializeField]
+	List<T> target;
+
+	public List<T> TargetList => target;
+
+	public Serialization(List<T> target)
+	{
+		this.target = target;
+	}
+}
+
+
 //用于系列化Dictionary<TKey,TValue>
 public class Serialization<TKey, TValue> : ISerializationCallbackReceiver
 {
@@ -38,6 +53,16 @@ public class Serialization<TKey, TValue> : ISerializationCallbackReceiver
 
 public class SerializeTools
 {
+	public static string ListToJson<T>(List<T> list)
+	{
+		return JsonUtility.ToJson(new Serialization<T>(list));
+	}
+
+	public static List<T> ListFromJson<T>(string str)
+	{
+		return JsonUtility.FromJson<Serialization<T>>(str).TargetList;
+	}
+
     public static string DicToJson<TKey, TValue>(Dictionary<TKey, TValue> dic)
     {
         return JsonUtility.ToJson(new Serialization<TKey, TValue>(dic));

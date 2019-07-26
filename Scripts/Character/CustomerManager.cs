@@ -12,7 +12,9 @@ public class CustomerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        TestSpawn();
+		//TestSpawn();
+		TestSaveFirstNameTable();
+		TestLoadFirstNameTable();
     }
 
     // Update is called once per frame
@@ -53,7 +55,7 @@ public class CustomerManager : MonoBehaviour
         {
             GameObject customerGO = Instantiate(CustomerTemplate, TestTrans.position,TestTrans.rotation);
             Customer customerProperty = customerGO.GetComponent<Customer>();
-            customerProperty.CustomerData = spawningCustomers[i];
+            customerProperty.Data = spawningCustomers[i];
             m_SpawnedCustomerCache.Add(customerGO);
             yield return new WaitForSeconds(spawnTime);
         }
@@ -82,5 +84,22 @@ public class CustomerManager : MonoBehaviour
         m_CustomerDataList = cumList;
         StartCoroutine(SpawnCustomers(cumList, 1));
     }
-    #endregion
+	#endregion
+
+	#region TestFirstNameTable
+	private void TestSaveFirstNameTable()
+	{
+		List<FirstName> testList = new List<FirstName>();
+		FirstName fn = new FirstName("马冬梅",0.8f);
+		testList.Add(fn);
+		SaveLoadManager.GetInstance().SaveFirstNameJson(testList);
+	}
+
+	private void TestLoadFirstNameTable()
+	{
+		string firstNameTable = SaveLoadManager.GetInstance().LoadFirstNameJson();
+		List<FirstName> testList = SerializeTools.ListFromJson<FirstName>(firstNameTable);
+		Debug.Log(testList[0].Weight);
+	}
+	#endregion
 }
