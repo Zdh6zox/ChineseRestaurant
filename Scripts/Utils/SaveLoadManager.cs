@@ -41,6 +41,16 @@ public class SaveLoadManager
 		return m_Instance;
 	}
 
+    public string LoadCustomerDataJson()
+    {
+        if(File.Exists(m_CustomerTablePath))
+        {
+            return File.ReadAllText(m_CustomerTablePath);
+        }
+
+        throw new System.Exception("Cannot Find Customer Data Table");
+    }
+
 	public string LoadFirstNameJson()
 	{
 		if(File.Exists(m_FirstNameTablePath))
@@ -61,10 +71,21 @@ public class SaveLoadManager
 		throw new System.Exception("Cannot Find Second Name Table");
 	}
 
-	public void SaveFirstNameJson(List<FirstName> firstNameTable)
+    public void SaveCustomerDataJson(List<CustomerData> customerDataTable)
+    {
+        string customerDataTableStr = SerializeTools.ListToJson<CustomerData>(customerDataTable);
+        File.WriteAllText(m_SecondNameTablePath, customerDataTableStr);
+    }
+
+    public void SaveFirstNameJson(List<FirstName> firstNameTable)
 	{
 		string firstNameTableStr = SerializeTools.ListToJson<FirstName>(firstNameTable);
-		Debug.Log(firstNameTableStr);
 		File.WriteAllText(m_FirstNameTablePath, firstNameTableStr);
 	}
+
+    public void SaveSecondNameJson(List<SecondName> secondNameTable)
+    {
+        string secondNameTableStr = SerializeTools.ListToJson<SecondName>(secondNameTable);
+        File.WriteAllText(m_SecondNameTablePath, secondNameTableStr);
+    }
 }

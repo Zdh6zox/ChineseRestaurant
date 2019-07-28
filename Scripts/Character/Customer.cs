@@ -40,46 +40,6 @@ public class CustomerData : CharacterData
         UnityEngine.Random.Range(0, 5);
         return new CustomerData();
     }
-
-    #region TestCode
-    public void TestToJson()
-    {
-        CharacterName = "张三";
-        Description = "张三就是张三";
-        Gender = GenderType.GenderType_Male;
-        Relationship tmpRelationship = new Relationship("李四",10);
-        Relations.Add(tmpRelationship);
-        m_Type = CustomerType.CustomerType_Beggar;
-        FlavourFactor factor1 = new FlavourFactor();
-        factor1.Name = "甜";
-        FlavourFactor factor2 = new FlavourFactor();
-        factor2.Name = "酸";
-        FlavourFactor factor3 = new FlavourFactor();
-        factor3.Name = "辣";
-        FlavourFactor factor4 = new FlavourFactor();
-        factor4.Name = "咸";
-        Recipe testRecipe1 = new Recipe();
-        testRecipe1.Type = RecipeType.RecipeType_Chuan;
-        testRecipe1.Name = "麻婆豆腐";
-        List<FlavourFactor> list1 = new List<FlavourFactor>();
-        list1.Add(factor1);
-        list1.Add(factor3);
-        List<FlavourFactor> list2 = new List<FlavourFactor>();
-        list2.Add(factor1);
-        list2.Add(factor4);
-        testRecipe1.Flavours = list1;
-        testRecipe1.FlavourMods = list2;
-        Recipe testRecipe2 = new Recipe();
-        testRecipe2.Type = RecipeType.RecipeType_Chuan;
-        testRecipe2.Name = "开水白菜";
-        testRecipe2.Flavours = list2;
-
-        m_PreferRecipe.Add(testRecipe1);
-        m_PreferRecipe.Add(testRecipe2);
-        string testStr = JsonUtility.ToJson(this);
-        Debug.Log(testStr);
-    }
-    #endregion
 }
 
 //对于Customer类，初步想法是先定义特殊的Customer，然后在初次运行时生成Customer表，储存在本地
@@ -90,6 +50,5 @@ public class Customer : MonoBehaviour
 
 	void Start()
 	{
-		//Data.TestToJson();
 	}
 }

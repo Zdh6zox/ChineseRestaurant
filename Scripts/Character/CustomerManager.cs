@@ -4,23 +4,37 @@ using UnityEngine;
 
 public class CustomerManager : MonoBehaviour
 {
+    private static CustomerManager m_Instance;
+
     public GameObject CustomerTemplate;
     public Transform TestTrans;
     private List<CustomerData> m_CustomerDataList;
     private List<GameObject> m_SpawnedCustomerCache = new List<GameObject>(); //缓存生成的顾客，用于查询
 
+
+    public CustomerManager()
+    {
+       
+    }
     // Start is called before the first frame update
     void Start()
     {
-		//TestSpawn();
-		TestSaveFirstNameTable();
-		TestLoadFirstNameTable();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public static CustomerManager GetInstance()
+    {
+        if(m_Instance == null)
+        {
+            m_Instance = new CustomerManager();
+        }
+
+        return m_Instance;
     }
 
     public void SpawnCustomer()
@@ -60,46 +74,4 @@ public class CustomerManager : MonoBehaviour
             yield return new WaitForSeconds(spawnTime);
         }
     }
-
-
-    #region TestSpawn
-    void TestSpawn()
-    {
-        CustomerData cum1 = new CustomerData();
-        cum1.CharacterName = "张三";
-        cum1.Gender = GenderType.GenderType_Male;
-        CustomerData cum2 = new CustomerData();
-        cum2.CharacterName = "李四";
-        cum2.Relations.Add(new Relationship("张三", 10));
-        cum2.Description = "不是张三";
-        cum2.Gender = GenderType.GenderType_Male;
-        CustomerData cum3 = new CustomerData();
-        cum3.CharacterName = "王二姐";
-        cum3.Gender = GenderType.GenderType_Female;
-
-        List<CustomerData> cumList = new List<CustomerData>();
-        cumList.Add(cum1);
-        cumList.Add(cum2);
-        cumList.Add(cum3);
-        m_CustomerDataList = cumList;
-        StartCoroutine(SpawnCustomers(cumList, 1));
-    }
-	#endregion
-
-	#region TestFirstNameTable
-	private void TestSaveFirstNameTable()
-	{
-		List<FirstName> testList = new List<FirstName>();
-		FirstName fn = new FirstName("马冬梅",0.8f);
-		testList.Add(fn);
-		SaveLoadManager.GetInstance().SaveFirstNameJson(testList);
-	}
-
-	private void TestLoadFirstNameTable()
-	{
-		string firstNameTable = SaveLoadManager.GetInstance().LoadFirstNameJson();
-		List<FirstName> testList = SerializeTools.ListFromJson<FirstName>(firstNameTable);
-		Debug.Log(testList[0].Weight);
-	}
-	#endregion
 }
