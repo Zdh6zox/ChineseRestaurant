@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6543988021631964574}
-  - component: {fileID: 492024361268692065}
+  - component: {fileID: 7578436711318464333}
   m_Layer: 0
-  m_Name: CustomerManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &492024361268692065
+--- !u!114 &7578436711318464333
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,9 +40,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5350882967556175242}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c5ced84b6f792944a1bfcacef8288ac, type: 3}
+  m_Script: {fileID: 11500000, guid: bb4046c1d815aff488b6dfd457834cf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CustomerTemplate: {fileID: 4396135920577105400, guid: 98747d7c31730ca42bb8e16d65dd868c,
-    type: 3}
-  TestTrans: {fileID: 0}

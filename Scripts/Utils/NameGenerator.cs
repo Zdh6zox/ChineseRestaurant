@@ -70,7 +70,7 @@ public class NameGenerator
 
 	public string GenerateName(GenderType type)
 	{
-		float randomWeight = Random.Range(0, 1);
+		float randomWeight = Random.Range(0.0f, 1.0f);
 		List<FirstName> qualifiedFNList = m_FirstNamesCache.FindAll(n => n.Weight >= randomWeight);
 		List<FirstName> unqualifiedFNList = m_FirstNamesCache.FindAll(n => n.Weight < randomWeight);
 		string finalName = "";
