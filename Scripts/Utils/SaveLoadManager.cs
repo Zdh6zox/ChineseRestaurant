@@ -11,6 +11,10 @@ public class SaveLoadManager
     private static string m_CustomerTemplatePath;
     private static string m_FirstNameTablePath;
     private static string m_SecondNameTablePath;
+    private static string m_RecipeListPath;
+    private static string m_RecipeNamePath;
+    private static string m_FlavourNamePath;
+    private static string m_CookMethodPath;
 
 	private static SaveLoadManager m_Instance;
     
@@ -19,10 +23,17 @@ public class SaveLoadManager
 		m_SaveFilePath = dataPath + /*"/" + productName +*/ "/Save" + "/Save.json";
 		m_CustomerTablePath = dataPath + /*"/" + productName +*/ "/Save" + "/Customers.json";
         m_SpecialCustomerTablePath = dataPath + /*"/" + productName +*/ "/Save" + "/SpecialCustomers.json";
+        m_RecipeListPath = dataPath + /*"/" + productName +*/"/Save" + "/RecipeList.json";
         m_CustomerTemplatePath = dataPath + "/Prefabs/Character/Customer.prefab";
+
+
+        //temp
         m_FirstNameTablePath = dataPath + /*"/" + productName +*/ "/Temp" + "/FirstName.json";
-		m_SecondNameTablePath = dataPath + /*"/" + productName +*/ "/Temp" + "/SecondName.json";
-	}
+        m_SecondNameTablePath = dataPath + /*"/" + productName +*/ "/Temp" + "/SecondName.json";
+        m_RecipeNamePath = dataPath + /*"/" + productName +*/ "/Temp" + "/RecipeName.json";
+        m_FlavourNamePath = dataPath + /*"/" + productName +*/ "/Temp" + "/FlavourName.txt";
+        m_CookMethodPath = dataPath + /*"/" + productName +*/ "/Temp" + "/CookMethodName.txt";
+    }
 
     public void SaveGame()
     {
@@ -84,11 +95,53 @@ public class SaveLoadManager
 		throw new System.Exception("Cannot Find Second Name Table");
 	}
 
+    public string LoadRecipeJson()
+    {
+        if (File.Exists(m_RecipeListPath))
+        {
+            return File.ReadAllText(m_RecipeListPath);
+        }
+        throw new System.Exception("Cannot Find Recipe List");
+    }
+
+    public string LoadRecipeName()
+    {
+        if (File.Exists(m_RecipeNamePath))
+        {
+            return File.ReadAllText(m_RecipeNamePath);
+        }
+        throw new System.Exception("Cannot Find Recipe Name TxT");
+    }
+
+    public string LoadFlavourName()
+    {
+        if (File.Exists(m_FlavourNamePath))
+        {
+            return File.ReadAllText(m_FlavourNamePath);
+        }
+        throw new System.Exception("Cannot Find Flavour Name TxT");
+    }
+
+    public string LoadCookMethodName()
+    {
+        if (File.Exists(m_CookMethodPath))
+        {
+            return File.ReadAllText(m_CookMethodPath);
+        }
+        throw new System.Exception("Cannot Find Cook Method Name TxT");
+    }
+
     public GameObject LoadCustomerTemplate()
     {
         //只在Editor模式下有效
         return UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Character/Customer.prefab");
         //return Resources.Load(m_CustomerTemplatePath) as GameObject;
+    }
+
+    public GameObject LoadWordTemplate()
+    {
+        //只在Editor模式下有效
+        return UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UIObject/Word.prefab");
     }
 
     #endregion
@@ -116,6 +169,14 @@ public class SaveLoadManager
     {
         string secondNameTableStr = SerializeTools.ListToJson<SecondName>(secondNameTable);
         File.WriteAllText(m_SecondNameTablePath, secondNameTableStr);
+    }
+
+    public void SaveRecipeJson(List<Recipe> recipeList)
+    {
+        string recipeListStr = SerializeTools.ListToJson<Recipe>(recipeList);
+        //delete previous content
+        //File.Delete(m_RecipeListPath);
+        File.WriteAllText(m_RecipeListPath, recipeListStr);
     }
     #endregion
 }

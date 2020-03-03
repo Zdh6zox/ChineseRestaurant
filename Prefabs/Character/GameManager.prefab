@@ -10,9 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 6543988021631964574}
   - component: {fileID: 7578436711318464333}
+  - component: {fileID: 6084504687456790469}
+  - component: {fileID: 94161243}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,3 +45,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb4046c1d815aff488b6dfd457834cf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DifficultySettings:
+    Difficulty: 0
+    NumberOfType:
+    - CustomerType: 0
+      Number: 20
+      MaxMoney: 200
+      MinMoney: 0
+    - CustomerType: 1
+      Number: 50
+      MaxMoney: 300
+      MinMoney: 50
+    - CustomerType: 2
+      Number: 50
+      MaxMoney: 500
+      MinMoney: 100
+    - CustomerType: 3
+      Number: 10
+      MaxMoney: 4000
+      MinMoney: 3000
+    - CustomerType: 4
+      Number: 30
+      MaxMoney: 500
+      MinMoney: 100
+    - CustomerType: 5
+      Number: 10
+      MaxMoney: 2000
+      MinMoney: 500
+    - CustomerType: 6
+      Number: 30
+      MaxMoney: 4000
+      MinMoney: 1000
+    - CustomerType: 7
+      Number: 20
+      MaxMoney: 500
+      MinMoney: 100
+    - CustomerType: 8
+      Number: 20
+      MaxMoney: 800
+      MinMoney: 200
+--- !u!114 &6084504687456790469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5350882967556175242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 421a6ee1970fda442ac9cf4eebe4fc87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &94161243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5350882967556175242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeb6dbf488ff7754ea032ef800b02977, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curEventSystem: {fileID: 0}

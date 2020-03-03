@@ -2,7 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class CustomerManager
+public enum CustomerSpawnStrategy
+{
+    Random
+}
+
+
+public class CustomerManager
 {
     private GameObject m_CustomerTemplate;
     private GameManager m_GameManager;
@@ -16,15 +22,15 @@ public partial class CustomerManager
     {
         m_GameManager = gameManager;
         m_CustomerTemplate = SaveLoadManager.GetInstance().LoadCustomerTemplate();
-        if(m_CustomerTemplate == null)
+        if (m_CustomerTemplate == null)
         {
-            throw new System.Exception("Cannot load customer template");
+            throw new System.Exception("Cannot load customer template,wrong path?");
         }
         string customerDataListJson = SaveLoadManager.GetInstance().LoadCustomerDataJson();
-        if(customerDataListJson == "")
+        if (customerDataListJson == "")
         {
-           Debug.Log("No CustomerData Loaded, create new one");
-           CreateCustomerTable();
+            Debug.Log("No CustomerData Loaded, create new one");
+            CreateCustomerTable();
         }
         else
         {
@@ -40,25 +46,114 @@ public partial class CustomerManager
         }
     }
 
-    public void SpawnCustomer()
+    private Customer SpawnCustomer(CustomerData spawningCustomerData, SpawnPosition seletcedSpawner)
     {
-        int index = 0;
-        while (true)
+        if (seletcedSpawner == null)
+            throw new System.Exception("null spawner");
+
+        GameObject customerGO = MonoBehaviour.Instantiate(m_CustomerTemplate);
+        customerGO.transform.position = seletcedSpawner.SpawnPos;
+        customerGO.transform.rotation = seletcedSpawner.SpawnRot;
+        Customer customerProperty = customerGO.GetComponent<Customer>();
+        customerProperty.Data = spawningCustomerData;
+        customerProperty.InitializeCustomer();
+        m_SpawnedCustomerCache.Add(customerGO);
+        return customerProperty;
+    }
+
+    private void SpawnCustomer(CustomerData spawningCustomerData, Vector3 pos, Quaternion rot)
+    {
+        GameObject customerGO = MonoBehaviour.Instantiate(m_CustomerTemplate);
+        customerGO.transform.position = pos;
+        customerGO.transform.rotation = rot;
+        Customer customerProperty = customerGO.GetComponent<Customer>();
+        customerProperty.Data = spawningCustomerData;
+        customerProperty.InitializeCustomer();
+        m_SpawnedCustomerCache.Add(customerGO);
+    }
+
+    public void SpawnRandomCustomer(SpawnPosition seletcedSpawner)
+    {
+        if (seletcedSpawner == null)
+            return;
+
+        CustomerData customerData = GetNextSpawningCustomer(CustomerSpawnStrategy.Random);
+        Vector3 pos;
+        Quaternion rot;
+        seletcedSpawner.GetSpawnPosAndRot(out pos, out rot);
+        SpawnCustomer(customerData, pos, rot);        
+    }
+
+    private CustomerData GetNextSpawningCustomer(CustomerSpawnStrategy strategy)
+    {
+        switch (strategy)
         {
-            index = Random.Range(0, m_CustomerDataList.Count);
-            CustomerData customerData = m_CustomerDataList[index];
-            if(m_SpawnedCustomerCache.Exists(x => x.GetComponent<Customer>().Data.CharacterName == customerData.CharacterName) == false)
-            {
-                GameObject customerGO = MonoBehaviour.Instantiate(m_CustomerTemplate);
-                Customer customerProperty = customerGO.GetComponent<Customer>();
-                customerProperty.Data = m_CustomerDataList[index];
-                m_SpawnedCustomerCache.Add(customerGO);
-                break;
-            }
+            case CustomerSpawnStrategy.Random:
+                int index = 0;
+                int curIter = 0;
+                while (true)
+                {
+                    curIter++;
+                    if (curIter >= m_CustomerDataList.Count)
+                        throw new System.Exception("Cannot spawn next customer");
+                    index = Random.Range(0, m_CustomerDataList.Count);
+                    CustomerData customerData = m_CustomerDataList[index];
+                    if (m_SpawnedCustomerCache.Exists(x => x.GetComponent<Customer>().Data.CharacterName == customerData.CharacterName) == false)
+                    {
+                        return customerData;
+                    }
+                }
+            default:
+                return new CustomerData();
         }
     }
 
-    public void LoadCustomerTable()
+    public void SpawnCustomerGroup(CustomerSpawnStrategy strategy, int groupNum, SpawnPosition selectedSpawner)
+    {
+        if (selectedSpawner == null)
+            return;
+
+        CustomerData leaderData = GetNextSpawningCustomer(strategy);
+        Customer leader = SpawnCustomer(leaderData, selectedSpawner);
+        leader.SetAsLeader();
+        Blackboard leader_bb = leader.GetComponent<Blackboard>();
+        CustomerGroup group = CustomerGroup.CreateGroup(leader);
+        List<Customer> members = new List<Customer>();
+        //We can get positive relations from relaters, for now just get from closest relations 
+        for(int i = 0;i<leaderData.PositiveRelations.Count;++i)
+        {
+            if (i >= groupNum - 1)
+                break;
+
+            //TODO add strategy here to choose relations
+            Relationship relationShip = leaderData.PositiveRelations[i];
+            CustomerData related = LookupCustomer(relationShip.WithWho);
+            Customer member = SpawnCustomer(related, selectedSpawner);
+
+            members.Add(member);
+
+            Blackboard member_bb = member.GetComponent<Blackboard>();
+            if(member_bb)
+            {
+                member_bb.AddOrModifyBBValue<CustomerGroup>("Group", group);
+            }
+        }
+
+        group.ExpandGroup(members);
+
+        //add group into all members' blackboard
+        if(leader_bb)
+        {
+            leader_bb.AddOrModifyBBValue<CustomerGroup>("Group", group);
+        }
+    }
+
+    public void OnCustomerUnSpawned(Customer customer)
+    {
+        m_SpawnedCustomerCache.Remove(customer.gameObject);
+    }
+
+    public void UnspawnAllExistingCustomer()
     {
 
     }
@@ -85,7 +180,7 @@ public partial class CustomerManager
 
         //生成初始关系图，暂定每人的关系数量为5.
         for (int i = 0; i < m_CustomerDataList.Count; ++i)
-        {        
+        {
             CustomerData customerData = m_CustomerDataList[i];
             if (customerData.Relations.Count >= 5)
                 continue;
@@ -96,20 +191,25 @@ public partial class CustomerManager
             int positiveRelationNum = Random.Range(0, 6);
             for (int iP = 0; iP < positiveRelationNum; iP++)
             {
-                while(true)
+                while (true)
                 {
                     int ranIndex = Random.Range(0, m_CustomerDataList.Count);
-                    if(usedIndex.Exists(x => x==ranIndex) == false)
+                    if (usedIndex.Exists(x => x == ranIndex) == false)
                     {
                         CustomerData otherCustomer = m_CustomerDataList[ranIndex];
                         if (otherCustomer.Relations.Count >= 5)
+                        {
+                            usedIndex.Add(ranIndex);
                             continue;
+                        }
 
                         int positiveRelationScore = Random.Range(1, 9); //初始情况下，正向关系最大值为8                        
                         Relationship relation = new Relationship(otherCustomer.CharacterName, positiveRelationScore);
                         customerData.Relations.Add(relation);
+                        customerData.PositiveRelations.Add(relation);
                         Relationship revRelation = new Relationship(customerData.CharacterName, positiveRelationScore);
                         otherCustomer.Relations.Add(revRelation);
+                        otherCustomer.PositiveRelations.Add(revRelation);
                         usedIndex.Add(ranIndex);
                         break;
                     }
@@ -127,13 +227,18 @@ public partial class CustomerManager
                     {
                         CustomerData otherCustomer = m_CustomerDataList[ranIndex];
                         if (otherCustomer.Relations.Count >= 5)
+                        {
+                            usedIndex.Add(ranIndex);
                             continue;
+                        }
 
                         int negativeRelationScore = Random.Range(-8, 0); //初始情况下，负向关系最小值为-8                        
                         Relationship relation = new Relationship(otherCustomer.CharacterName, negativeRelationScore);
                         customerData.Relations.Add(relation);
+                        customerData.NegativeRelations.Add(relation);
                         Relationship revRelation = new Relationship(customerData.CharacterName, negativeRelationScore);
                         otherCustomer.Relations.Add(revRelation);
+                        otherCustomer.NegativeRelations.Add(relation);
                         usedIndex.Add(ranIndex);
                         break;
                     }
@@ -149,23 +254,6 @@ public partial class CustomerManager
     public void CollectCustomizedCustomer()
     {
         //用于制作自定义顾客
-    }
-
-    public bool SpawnCustomerGroup()
-    {
-        //外部调用spawn接口
-        return false;
-    }
-
-    private void SpawnCustomers(List<CustomerData> spawningCustomers) 
-    {
-        for(int i =0;i< spawningCustomers.Count; i++)
-        {
-            GameObject customerGO = MonoBehaviour.Instantiate(m_CustomerTemplate);
-            Customer customerProperty = customerGO.GetComponent<Customer>();
-            customerProperty.Data = spawningCustomers[i];
-            m_SpawnedCustomerCache.Add(customerGO);
-        }
     }
 
     private CustomerData GenerateCustomerData()
@@ -219,4 +307,4 @@ public partial class CustomerManager
     {
 
     }
-} 
+}

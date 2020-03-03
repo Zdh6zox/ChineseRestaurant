@@ -25,6 +25,10 @@ public class CharacterData
     private List<Relationship> m_Relations = new List<Relationship>(); //目前使用Name当Key,使用int来表示关系，范围为 [-10,10]
     [SerializeField]
     private int m_Money;
+    [SerializeField]
+    private List<Relationship> m_PositiveRelations = new List<Relationship>();
+    [SerializeField]
+    private List<Relationship> m_NegativeRelations = new List<Relationship>();
 
     public string CharacterName { get => m_CharacterName; set => m_CharacterName = value; }
     public string Description { get => m_Description; set => m_Description = value; }
@@ -32,4 +36,6 @@ public class CharacterData
     public Inventory Inventory { get => m_Inventory; set => m_Inventory = value; }
     public List<Relationship> Relations { get => m_Relations; set => m_Relations = value; }
     public int Money { get => m_Money; set => m_Money = value; }
+    public List<Relationship> NegativeRelations { get => m_NegativeRelations; set => m_NegativeRelations = value; }
+    public List<Relationship> PositiveRelations { get => m_PositiveRelations; set => m_PositiveRelations = value; }
 }

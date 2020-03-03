@@ -11,6 +11,9 @@ public class FlavourFactor
 {
     [SerializeField]
     private string m_Name;
+    [SerializeField]
+    private int m_factorDegree;
 
     public string Name { get => m_Name; set => m_Name = value; }
+    public int FactorDegree { get => m_factorDegree; set => m_factorDegree = value; }
 }

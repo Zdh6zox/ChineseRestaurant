@@ -14,7 +14,7 @@ public enum RecipeType : uint
     RecipeType_Xiang, //湘菜
     RecipeType_Hui, //徽菜
 
-    RecipeType_Count
+    RecipeType_Invalid
 }
 
 //菜谱类
@@ -26,9 +26,15 @@ public class Recipe
     [SerializeField]
     private string m_Name;
     [SerializeField]
-    private List<FlavourFactor> m_Flavours;
+    private List<FlavourFactor> m_Flavours = new List<FlavourFactor>();
     [SerializeField]
-    private List<FlavourFactor> m_FlavourMods;
+    private List<FlavourFactor> m_FlavourMods = new List<FlavourFactor>();
+    [SerializeField]
+    private List<Ingredient> m_Ingredients = new List<Ingredient>();
+    [SerializeField]
+    private List<CookMethod> m_CookMethods = new List<CookMethod>();
+
+    private static Recipe _InvalidRecipe;
 
     public RecipeType Type { get => m_Type; set => m_Type = value; }
     public string Name { get => m_Name; set => m_Name = value; }
@@ -36,4 +42,21 @@ public class Recipe
     public List<FlavourFactor> Flavours { get => m_Flavours; set => m_Flavours = value; }
     //针对每个顾客的偏好的额外味道因子
     public List<FlavourFactor> FlavourMods { get => m_FlavourMods; set => m_FlavourMods = value; }
+    //原料
+    public List<Ingredient> Ingredients { get => m_Ingredients; set => m_Ingredients = value; }
+    //制作方式
+    public List<CookMethod> CookMethods { get => m_CookMethods; set => m_CookMethods = value; }
+
+
+
+    public static Recipe GetInvalid()
+    {
+        if(_InvalidRecipe == null)
+        {
+            _InvalidRecipe = new Recipe();
+            _InvalidRecipe.Type = RecipeType.RecipeType_Invalid;
+        }
+
+        return _InvalidRecipe;
+    }
 }
